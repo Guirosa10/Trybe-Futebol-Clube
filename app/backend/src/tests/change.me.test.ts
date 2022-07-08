@@ -5,18 +5,45 @@ import chaiHttp = require('chai-http');
 
 import { app } from '../app';
 import Example from '../database/models/ExampleModel';
-
+import users from '../database/models/users';
 import { Response } from 'superagent';
 
 chai.use(chaiHttp);
 
 const { expect } = chai;
 
-describe('Seu teste', () => {
-  /**
+describe('Faz o login', () => {
+  /**des
    * Exemplo do uso de stubs com tipos
    */
+  describe('quando não existem usuários no banco de dados', () => {
+    /* let chaiHttpResponse: Response; */
+    
+    before(async () => {
+      sinon
+        .stub(users, "findByPk")
+        .resolves()
+    })
 
+    after(()=>{
+        (Example.findOne as sinon.SinonStub).restore();
+    })
+
+    it('Espera um erro status 400', async () => {
+        const chaiHttpResponse = await chai
+          .request(app)
+          .post('/login')
+          .send({
+            username: "trybe",
+            password: "trybe"
+          })
+        
+        expect(chaiHttpResponse.status).to.be.equal(400)
+    });
+    
+
+
+  })
   // let chaiHttpResponse: Response;
 
   // before(async () => {
