@@ -24,6 +24,7 @@ users.init({
 }, {
   sequelize,
   modelName: 'users',
+  timestamps: false,
 });
 
 export default users;
