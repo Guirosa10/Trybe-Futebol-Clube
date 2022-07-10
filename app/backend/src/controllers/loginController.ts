@@ -1,6 +1,10 @@
+import * as jwt from 'jsonwebtoken';
+import * as dotenv from 'dotenv';
 import { Request, Response } from 'express';
 import comparison from '../utils/bcryptComparison';
 import users from '../database/models/users';
+
+dotenv.config();
 
 export default class LoginController {
   static async login(req: Request, res: Response) {
@@ -17,6 +21,9 @@ export default class LoginController {
     if (!results) {
       return res.status(400).json('User or Password are invalid');
     }
-    return res.status(200).json('Logged In successfully');
+    const secret : string = process.env.JWT_SECRET as string;
+    const token = jwt.sign({ email }, secret);
+
+    return res.status(200).json({ token });
   }
 }

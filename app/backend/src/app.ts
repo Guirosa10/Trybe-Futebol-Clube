@@ -1,4 +1,5 @@
 import * as express from 'express';
+import validateLoginBody from './middleware/loginValidationMiddleware';
 import LoginRoute from './routes/loginRoute';
 
 class App {
@@ -23,7 +24,7 @@ class App {
 
     this.app.use(express.json());
     this.app.use(accessControl);
-    this.app.use('/login', new LoginRoute().router);
+    this.app.use('/login', validateLoginBody, new LoginRoute().router);
   }
 
   public start(PORT: string | number):void {
