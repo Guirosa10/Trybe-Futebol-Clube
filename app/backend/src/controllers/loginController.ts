@@ -15,11 +15,11 @@ export default class LoginController {
     console.log('cheguei no controller 2');
 
     if (!findUser) {
-      return res.status(400).send('User or Password are incorrect');
+      return res.status(401).send('Incorrect email or password');
     }
     const results = await comparison(password, findUser.password);
     if (!results) {
-      return res.status(400).json('User or Password are invalid');
+      return res.status(401).json('Incorrect email or password');
     }
     const secret : string = process.env.JWT_SECRET as string;
     const token = jwt.sign({ email }, secret);
