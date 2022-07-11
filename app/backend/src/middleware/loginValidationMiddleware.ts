@@ -7,10 +7,10 @@ export default class validateLogin {
     next: express.NextFunction,
   ) => {
     const { email, password } = req.body;
-    if (typeof email === 'undefined') {
+    if (typeof email === 'undefined' || !email) {
       return res.status(400).json({ message: 'All fields must be filled' });
     }
-    if (typeof password === 'undefined') {
+    if (typeof password === 'undefined' || !password) {
       return res.status(400).json({ message: 'All fields must be filled' });
     }
     next();
