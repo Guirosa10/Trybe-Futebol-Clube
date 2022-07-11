@@ -1,6 +1,7 @@
 import * as express from 'express';
 import validateLogin from '../middleware/loginValidationMiddleware';
 import LoginController from '../controllers/loginController';
+import ValidateToken from '../middleware/tokenValidationMiddleware';
 
 export default class LoginRoute {
   router;
@@ -12,6 +13,7 @@ export default class LoginRoute {
   public routes() {
     console.log('cheguei na rota');
     this.router.post('/', validateLogin.validateLoginBody, LoginController.login);
+    this.router.get('/validate', ValidateToken.tokenValidation, LoginController.validateRole);
     console.log('sai da rota');
   }
 }

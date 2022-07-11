@@ -39,10 +39,54 @@ describe('Faz o login', () => {
           })
         
         expect(chaiHttpResponse.status).to.be.equal(400)
-    });
+    })
+  })
+
+  describe('Quando a senha está incorreta', () => {
+    before(async () => {
+      sinon
+        .stub(users, "findOne")
+        .resolves()
+    })
+
+    after(()=>{
+      (Example.findOne as sinon.SinonStub).restore();
+    })
+
+    it('Espera um erro com mensagem quando a senha está incorreta', async () => {
+      const chaiHttpResponse = await chai
+        .request(app)
+        .post('/login')
+        .send({
+          email: 'admin@admin.com',
+          password: 'xablaui'
+        })
+      expect(chaiHttpResponse.status).to.be.equal(401)
+      expect(chaiHttpResponse.body).to.be.eql({ message: 'Incorrect email or password' })
+    })
+  })
+  describe('Quando o email está incorreto', () => {
+    before(async () => {
+      sinon
+        .stub(users, "findOne")
+        .resolves()
+    })
+
+    after(()=>{
+      (Example.findOne as sinon.SinonStub).restore();
+    })
     
-
-
+    it('Espera um erro com mensagem quando o email está incorreto', async () => {
+      const chaiHttpResponse = await chai
+        .request(app)
+        .post('/login')
+        .send({
+          email: 'xabmin@xaadmin.com',
+          password: 'xablaui'
+        })
+      expect(chaiHttpResponse.status).to.be.equal(401)
+      expect(chaiHttpResponse.body).to.be.eql({ message: 'Incorrect email or password' })
+    })
   })
   // let chaiHttpResponse: Response;
 

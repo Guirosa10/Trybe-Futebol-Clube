@@ -26,4 +26,12 @@ export default class LoginController {
 
     return res.status(200).json({ token });
   }
+
+  static async validateRole(req: Request, res: Response) {
+    const token = req.headers.authorization as string;
+
+    const results = (jwt.verify(token, process.env.JWT_SECRET as string)) as { email: string };
+    const user = await users.findOne({ where: { email: results.email } });
+    return res.status(200).json({ role: user?.role });
+  }
 }
