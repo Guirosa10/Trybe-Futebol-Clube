@@ -23,7 +23,7 @@ describe('Tenta fazer o login', () => {
     })
 
     after(()=>{
-        (Example.findOne as sinon.SinonStub).restore();
+        (users.findOne as sinon.SinonStub).restore();
     })
 
     it('Espera um erro status 400', async () => {
@@ -47,7 +47,7 @@ describe('Tenta fazer o login', () => {
     })
 
     after(()=>{
-      (Example.findOne as sinon.SinonStub).restore();
+      (users.findOne as sinon.SinonStub).restore();
     })
 
     it('Espera um erro com mensagem quando a senha está incorreta', async () => {
@@ -70,7 +70,7 @@ describe('Tenta fazer o login', () => {
     })
 
     after(()=>{
-      (Example.findOne as sinon.SinonStub).restore();
+      (users.findOne as sinon.SinonStub).restore();
     })
     
     it('Espera um erro com mensagem quando o email está incorreto', async () => {
@@ -93,23 +93,85 @@ describe('Tenta fazer o login', () => {
     })
 
     after(()=>{
-      (Example.findOne as sinon.SinonStub).restore();
+      (users.findOne as sinon.SinonStub).restore();
     })
-
-    interface ItokenInterface {
-      token: string
-    }
 
     it('Espera um erro com mensagem quando o email está incorreto', async () => {
       const chaiHttpResponse = await chai
         .request(app)
-        .post('/login/validate')
+        .post('/login')
         .send({
           email: 'admin@admin.com',
           password: 'secret_admin'
         })
       expect(chaiHttpResponse.status).to.be.equal(200)
-      expect(chaiHttpResponse.body).to.be.contain.keys('token')
+      expect(chaiHttpResponse.body).to.be.contain.keys(['token'])
+    })
+  })
+  describe('Quando o email não foi inserido', () => {
+    before(async () => {
+      sinon
+        .stub(users, "findOne")
+        .resolves()
+    })
+
+    after(()=>{
+      (users.findOne as sinon.SinonStub).restore();
+    })
+
+    it('Espera um erro com status', async () => {
+      const chaiHttpResponse = await chai
+        .request(app)
+        .post('/login')
+        .send({
+          password: 'secret_admin'
+        })
+      expect(chaiHttpResponse.status).to.be.equal(400)
+      expect(chaiHttpResponse.body).to.be.contain.keys(['message'])
+    })
+  })
+  describe('Quando o password não foi inserido', () => {
+    before(async () => {
+      sinon
+        .stub(users, "findOne")
+        .resolves()
+    })
+
+    after(()=>{
+      (users.findOne as sinon.SinonStub).restore();
+    })
+
+    it('Espera um erro com status', async () => {
+      const chaiHttpResponse = await chai
+        .request(app)
+        .post('/login')
+        .send({
+          email: 'admin@admin.com'
+        })
+      expect(chaiHttpResponse.status).to.be.equal(400)
+      expect(chaiHttpResponse.body).to.be.contain.keys(['message'])
+    })
+  })
+  describe('testa /login/validate', () => {
+    before(async () => {
+      sinon
+        .stub(users, "findOne")
+        .resolves()
+    })
+
+    after(()=>{
+      (users.findOne as sinon.SinonStub).restore();
+    })
+
+    it('Espera um erro com status', async () => {
+      const chaiHttpResponse = await chai
+        .request(app)
+        .get('/login/validate')
+        .send({
+          authorization: "auh190230aspdn10923a1293u9asdn12j93",
+        })
+      expect(chaiHttpResponse.status).to.be.equal(400)
+      expect(chaiHttpResponse.body).to.be('no token')
     })
   })
   it('Seu sub-teste', () => {
