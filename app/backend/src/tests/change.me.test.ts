@@ -6,7 +6,10 @@ import chaiHttp = require('chai-http');
 import { app } from '../app';
 import Example from '../database/models/ExampleModel';
 import users from '../database/models/users';
+import * as jwt from 'jsonwebtoken'
+import usersInterface from '../interfaces/usersInterface'
 import { Response } from 'superagent';
+import teams from '../database/models/teams';
 
 chai.use(chaiHttp);
 
@@ -43,7 +46,7 @@ describe('Tenta fazer o login', () => {
     before(async () => {
       sinon
         .stub(users, "findOne")
-        .resolves()
+        .resolves({ id: 1, username:'gui', email: 'admin@admin.com', password: 'xablau', role: 'admin' } as users)
     })
 
     after(()=>{
@@ -66,7 +69,7 @@ describe('Tenta fazer o login', () => {
     before(async () => {
       sinon
         .stub(users, "findOne")
-        .resolves()
+        .resolves({id: 1, username:'gui', email: 'admin@admin.com', password: 'xablau', role: 'admin'} as users)
     })
 
     after(()=>{
@@ -79,7 +82,7 @@ describe('Tenta fazer o login', () => {
         .post('/login')
         .send({
           email: 'xabmin@xaadmin.com',
-          password: 'xablaui'
+          password: 'xablau'
         })
       expect(chaiHttpResponse.status).to.be.equal(401)
       expect(chaiHttpResponse.body).to.be.eql({ message: 'Incorrect email or password' })
@@ -89,7 +92,7 @@ describe('Tenta fazer o login', () => {
     before(async () => {
       sinon
         .stub(users, "findOne")
-        .resolves()
+        .resolves({id: 1, username:'gui', email: 'admin@admin.com', password: 'xablau', role: 'admin'} as users)
     })
 
     after(()=>{
@@ -102,7 +105,7 @@ describe('Tenta fazer o login', () => {
         .post('/login')
         .send({
           email: 'admin@admin.com',
-          password: 'secret_admin'
+          password: 'xablau'
         })
       expect(chaiHttpResponse.status).to.be.equal(200)
       expect(chaiHttpResponse.body).to.be.contain.keys(['token'])
@@ -112,7 +115,7 @@ describe('Tenta fazer o login', () => {
     before(async () => {
       sinon
         .stub(users, "findOne")
-        .resolves()
+        .resolves({id: 1, username:'gui', email: 'admin@admin.com', password: 'xablau', role: 'admin'} as users)
     })
 
     after(()=>{
@@ -134,7 +137,7 @@ describe('Tenta fazer o login', () => {
     before(async () => {
       sinon
         .stub(users, "findOne")
-        .resolves()
+        .resolves({id: 1, username:'gui', email: 'admin@admin.com', password: 'xablau', role: 'admin'} as users)
     })
 
     after(()=>{
@@ -174,7 +177,43 @@ describe('Tenta fazer o login', () => {
       expect(chaiHttpResponse.body).to.be('no token')
     })
   })
-  it('Seu sub-teste', () => {
-    expect(false).to.be.eq(true);
-  });
+
 });
+describe('testa a camada teams no /teams', () => {
+    describe('retorna o array no get', () => {
+      before(async () => {
+        sinon
+          .stub(teams, "findAll")
+          .resolves([{id: 1, teamName: 'Xablau'}] as teams[])
+      })
+  
+      after(()=>{
+        (teams.findAll as sinon.SinonStub).restore();
+      })
+      it('Espera uma resposta com array de times', async () => {
+        const chaiHttpResponse = await chai
+          .request(app)
+          .get('/teams')
+        expect(chaiHttpResponse.status).to.be.equal(200)
+        expect(chaiHttpResponse.body).to.be.eql([{id: 1, teamName: 'Xablau'}])
+      })
+    })
+    describe('retorna um array vazio quando não há times no banco', () => {
+      before(async () => {
+        sinon
+          .stub(teams, "findAll")
+          .resolves([] as teams[])
+      })
+  
+      after(()=>{
+        (teams.findAll as sinon.SinonStub).restore();
+      })
+      it('Espera uma resposta com array de times', async () => {
+        const chaiHttpResponse = await chai
+          .request(app)
+          .get('/teams')
+        expect(chaiHttpResponse.status).to.be.equal(200)
+        expect(chaiHttpResponse.body).to.be.eql([])
+      })
+    })
+})

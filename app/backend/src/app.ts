@@ -1,5 +1,9 @@
 import * as express from 'express';
 import LoginRoute from './routes/loginRoute';
+import TeamRoute from './routes/teamRoute';
+
+const teamEntity = new TeamRoute();
+const userEntity = new LoginRoute();
 
 class App {
   public app: express.Express;
@@ -23,7 +27,8 @@ class App {
 
     this.app.use(express.json());
     this.app.use(accessControl);
-    this.app.use('/login', new LoginRoute().router);
+    this.app.use('/login', userEntity.router);
+    this.app.use('/teams', teamEntity.router);
   }
 
   public start(PORT: string | number):void {

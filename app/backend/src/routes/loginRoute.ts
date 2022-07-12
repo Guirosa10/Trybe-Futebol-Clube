@@ -11,9 +11,7 @@ export default class LoginRoute {
   }
 
   public routes() {
-    console.log('cheguei na rota');
     this.router.post('/', validateLogin.validateLoginBody, LoginController.login);
     this.router.get('/validate', ValidateToken.tokenValidation, LoginController.validateRole);
-    console.log('sai da rota');
   }
 }
