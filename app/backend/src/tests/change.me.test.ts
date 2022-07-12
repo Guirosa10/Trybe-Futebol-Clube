@@ -12,10 +12,7 @@ chai.use(chaiHttp);
 
 const { expect } = chai;
 
-describe('Faz o login', () => {
-  /**des
-   * Exemplo do uso de stubs com tipos
-   */
+describe('Tenta fazer o login', () => {
   describe('quando não existem usuários no banco de dados', () => {
     /* let chaiHttpResponse: Response; */
     
@@ -88,28 +85,33 @@ describe('Faz o login', () => {
       expect(chaiHttpResponse.body).to.be.eql({ message: 'Incorrect email or password' })
     })
   })
-  // let chaiHttpResponse: Response;
+  describe('Quando o email e senha estão corretos', () => {
+    before(async () => {
+      sinon
+        .stub(users, "findOne")
+        .resolves()
+    })
 
-  // before(async () => {
-  //   sinon
-  //     .stub(Example, "findOne")
-  //     .resolves({
-  //       ...<Seu mock>
-  //     } as Example);
-  // });
+    after(()=>{
+      (Example.findOne as sinon.SinonStub).restore();
+    })
 
-  // after(()=>{
-  //   (Example.findOne as sinon.SinonStub).restore();
-  // })
+    interface ItokenInterface {
+      token: string
+    }
 
-  // it('...', async () => {
-  //   chaiHttpResponse = await chai
-  //      .request(app)
-  //      ...
-
-  //   expect(...)
-  // });
-
+    it('Espera um erro com mensagem quando o email está incorreto', async () => {
+      const chaiHttpResponse = await chai
+        .request(app)
+        .post('/login/validate')
+        .send({
+          email: 'admin@admin.com',
+          password: 'secret_admin'
+        })
+      expect(chaiHttpResponse.status).to.be.equal(200)
+      expect(chaiHttpResponse.body).to.be.contain.keys('token')
+    })
+  })
   it('Seu sub-teste', () => {
     expect(false).to.be.eq(true);
   });
