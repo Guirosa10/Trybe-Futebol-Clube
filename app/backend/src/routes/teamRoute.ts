@@ -11,6 +11,7 @@ export default class TeamRoute {
   public routes() {
     console.log('cheguei na rota de times');
     this.router.get('/', teamsController.getAll);
+    this.router.get('/:id', teamsController.getById);
     console.log('sai da rota de times');
   }
 }

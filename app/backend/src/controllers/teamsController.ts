@@ -7,4 +7,10 @@ export default class teamsController {
     const results = await teams.findAll();
     return res.status(200).json(results);
   }
+
+  static async getById(req: Request, res: Response) {
+    const { id } = req.params;
+    const results = await teams.findByPk(id);
+    return res.status(200).json(results);
+  }
 }

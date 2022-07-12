@@ -214,6 +214,28 @@ describe('testa a camada teams no /teams', () => {
           .get('/teams')
         expect(chaiHttpResponse.status).to.be.equal(200)
         expect(chaiHttpResponse.body).to.be.eql([])
+      })  
+
+   
+    })
+    describe('retorna um objeto com id e time', () => {
+      before(async () => {
+        sinon
+          .stub(teams, "findByPk")
+          .resolves({id: 1, teamName: 'Flamengo'} as teams)
+      })
+    
+      after(()=>{
+        (teams.findAll as sinon.SinonStub).restore();
+      })
+      it('Espera uma resposta com um objeto de times', async () => {
+        const chaiHttpResponse = await chai
+          .request(app)
+          .get('/teams/1')
+        expect(chaiHttpResponse.status).to.be.equal(200)
+        expect(chaiHttpResponse.body).to.be.equal({id: 1, teamName: 'Flamengo'})
       })
     })
 })
+
+
