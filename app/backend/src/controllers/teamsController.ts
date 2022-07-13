@@ -1,4 +1,3 @@
-import 'dotenv/config';
 import { Request, Response } from 'express';
 import teams from '../database/models/teams';
 

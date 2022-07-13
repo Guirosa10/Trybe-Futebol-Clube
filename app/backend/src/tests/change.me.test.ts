@@ -160,6 +160,9 @@ describe('Tenta fazer o login', () => {
       sinon
         .stub(users, "findOne")
         .resolves()
+        sinon
+        .stub(jwt, 'verify')
+        .resolves(false)
     })
 
     after(()=>{
@@ -177,65 +180,86 @@ describe('Tenta fazer o login', () => {
       expect(chaiHttpResponse.body).to.be('no token')
     })
   })
+  describe('testa /login/validate', () => {
+    before(async () => {
+      sinon
+        .stub(users, "findOne")
+        .resolves()
+      sinon
+        .stub(jwt, 'verify')
+        .resolves(true)
+    })
+
+    after(()=>{
+      (users.findOne as sinon.SinonStub).restore();
+    })
+
+    it('Espera um sucesso', async () => {
+      const chaiHttpResponse = await chai
+        .request(app)
+        .get('/login/validate')
+      expect(chaiHttpResponse.status).to.be.equal(200)
+    })
+  })
 
 });
 describe('testa a camada teams no /teams', () => {
-    describe('retorna o array no get', () => {
-      before(async () => {
-        sinon
-          .stub(teams, "findAll")
-          .resolves([{id: 1, teamName: 'Xablau'}] as teams[])
-      })
-  
-      after(()=>{
-        (teams.findAll as sinon.SinonStub).restore();
-      })
-      it('Espera uma resposta com array de times', async () => {
-        const chaiHttpResponse = await chai
-          .request(app)
-          .get('/teams')
-        expect(chaiHttpResponse.status).to.be.equal(200)
-        expect(chaiHttpResponse.body).to.be.eql([{id: 1, teamName: 'Xablau'}])
-      })
+  describe('retorna o array no get', () => {
+    before(async () => {
+      sinon
+        .stub(teams, "findAll")
+        .resolves([{id: 1, teamName: 'Xablau'}] as teams[])
     })
-    describe('retorna um array vazio quando não há times no banco', () => {
-      before(async () => {
-        sinon
-          .stub(teams, "findAll")
-          .resolves([] as teams[])
-      })
-  
-      after(()=>{
-        (teams.findAll as sinon.SinonStub).restore();
-      })
-      it('Espera uma resposta com array de times', async () => {
-        const chaiHttpResponse = await chai
-          .request(app)
-          .get('/teams')
-        expect(chaiHttpResponse.status).to.be.equal(200)
-        expect(chaiHttpResponse.body).to.be.eql([])
-      })  
 
-   
+    after(()=>{
+      (teams.findAll as sinon.SinonStub).restore();
     })
-    describe('retorna um objeto com id e time', () => {
-      before(async () => {
-        sinon
-          .stub(teams, "findByPk")
-          .resolves({id: 1, teamName: 'Flamengo'} as teams)
-      })
-    
-      after(()=>{
-        (teams.findAll as sinon.SinonStub).restore();
-      })
-      it('Espera uma resposta com um objeto de times', async () => {
-        const chaiHttpResponse = await chai
-          .request(app)
-          .get('/teams/1')
-        expect(chaiHttpResponse.status).to.be.equal(200)
-        expect(chaiHttpResponse.body).to.be.equal({id: 1, teamName: 'Flamengo'})
-      })
+    it('Espera uma resposta com array de times', async () => {
+      const chaiHttpResponse = await chai
+        .request(app)
+        .get('/teams')
+      expect(chaiHttpResponse.status).to.be.equal(200)
+      expect(chaiHttpResponse.body).to.be.eql([{id: 1, teamName: 'Xablau'}])
     })
+  })
+  describe('retorna um array vazio quando não há times no banco', () => {
+    before(async () => {
+      sinon
+        .stub(teams, "findAll")
+        .resolves([] as teams[])
+    })
+
+    after(()=>{
+      (teams.findAll as sinon.SinonStub).restore();
+    })
+    it('Espera uma resposta com array de times', async () => {
+      const chaiHttpResponse = await chai
+        .request(app)
+        .get('/teams')
+      expect(chaiHttpResponse.status).to.be.equal(200)
+      expect(chaiHttpResponse.body).to.be.eql([])
+    })  
+
+  
+  })
+  describe('retorna um objeto com id e time', () => {
+    before(async () => {
+      sinon
+        .stub(teams, "findByPk")
+        .resolves({id: 1, teamName: 'Flamengo'} as teams)
+    })
+  
+    after(()=>{
+      (teams.findAll as sinon.SinonStub).restore();
+    })
+    it('Espera uma resposta com um objeto de times', async () => {
+      const chaiHttpResponse = await chai
+        .request(app)
+        .get('/teams/1')
+      expect(chaiHttpResponse.status).to.be.equal(200)
+      expect(chaiHttpResponse.body).to.be.equal({id: 1, teamName: 'Flamengo'})
+    })
+  })
 })
 
 
