@@ -17,6 +17,16 @@ export default class teamsController {
 
     return res.status(201).json(results);
   }
+
+  static async patchMatch(req: Request, res:Response) {
+    const { id } = req.params;
+    const match = await matches.findByPk(id);
+    if (match?.inProgress === true) {
+      match.inProgress = false;
+      await match.save();
+    }
+    return res.status(200).json({ message: 'Finished' });
+  }
 }
 
 // fonte para left join com sequelize https://stackoverflow.com/questions/27561915/how-can-i-use-left-join-with-sequelize;

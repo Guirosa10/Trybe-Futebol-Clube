@@ -13,6 +13,7 @@ export default class MatchesRoute {
     console.log('cheguei na rota de matches');
     this.router.get('/', matchesController.getAll);
     this.router.post('/', ValidateToken.tokenValidation, matchesController.createMatch);
+    this.router.patch('/:id/finish', matchesController.patchMatch);
     console.log('sai da rota de matches');
   }
 }
