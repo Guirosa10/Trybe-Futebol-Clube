@@ -9,7 +9,7 @@ export default class matches extends Model implements IMatchesInterface {
   homeTeamGoals: number;
   awayTeam!: number;
   awayTeamGoals: number;
-  inProgress: number;
+  inProgress: boolean;
 }
 
 matches.init({
@@ -23,7 +23,7 @@ matches.init({
   homeTeamGoals: DataTypes.INTEGER,
   awayTeam: DataTypes.INTEGER,
   awayTeamGoals: DataTypes.INTEGER,
-  inProgress: DataTypes.TINYINT,
+  inProgress: DataTypes.BOOLEAN,
 }, {
   sequelize,
   modelName: 'matches',

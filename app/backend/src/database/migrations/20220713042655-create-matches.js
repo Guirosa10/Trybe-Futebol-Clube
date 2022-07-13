@@ -29,7 +29,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       in_progress: {
-        type: Sequelize.TINYINT
+        type: Sequelize.BOOLEAN
       }
     },{
       timestamps: false,
