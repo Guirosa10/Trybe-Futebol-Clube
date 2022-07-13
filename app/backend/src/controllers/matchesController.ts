@@ -5,7 +5,8 @@ import teams from '../database/models/teams';
 export default class teamsController {
   static async getAll(_req: Request, res: Response) {
     const results = await matches.findAll({
-      include: [{ model: teams, attributes: ['teamName'] }],
+      include: [{ model: teams, as: 'teamHome', attributes: ['teamName'] },
+        { model: teams, as: 'teamAway', attributes: ['teamName'] }],
     });
     return res.status(200).json(results);
   }

@@ -9,27 +9,27 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       home_team: {
-        type: Sequelize.STRING
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'teams',
+          key: 'id'
+        }
       },
       home_team_goals: {
-        type: Sequelize.NUMBER
+        type: Sequelize.INTEGER
       },
       away_team: {
-        type: Sequelize.STRING
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'teams',
+          key: 'id'
+        }
       },
       away_team_goals: {
-        type: Sequelize.STRING
+        type: Sequelize.INTEGER
       },
       in_progress: {
-        type: Sequelize.BOOLEAN
-      },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.TINYINT
       }
     },{
       timestamps: false,
