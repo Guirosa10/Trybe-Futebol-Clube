@@ -1,7 +1,7 @@
 import * as express from 'express';
 import matchesController from '../controllers/matchesController';
 
-export default class TeamRoute {
+export default class MatchesRoute {
   router;
   constructor() {
     this.router = express.Router();
