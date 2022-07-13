@@ -7,7 +7,7 @@ export default class ValidateToken {
     const token = req.headers.authorization as string;
     const results = jwt.verify(token, process.env.JWT_SECRET as string);
     if (!results) {
-      return res.status(400).send('no token');
+      return res.status(401).json({ message: 'Token must be a valid token' });
     }
     console.log('sai da validação de token');
     next();

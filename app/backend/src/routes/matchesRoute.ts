@@ -1,6 +1,7 @@
 import * as express from 'express';
 import ValidateToken from '../middleware/tokenValidationMiddleware';
 import matchesController from '../controllers/matchesController';
+import validateTeams from '../middleware/teamEqualityValidationMiddleware';
 
 export default class MatchesRoute {
   router;
@@ -12,7 +13,13 @@ export default class MatchesRoute {
   public routes() {
     console.log('cheguei na rota de matches');
     this.router.get('/', matchesController.getAll);
-    this.router.post('/', ValidateToken.tokenValidation, matchesController.createMatch);
+    this.router
+      .post(
+        '/',
+        ValidateToken.tokenValidation,
+        validateTeams.checkNullorEqualTeams,
+        matchesController.createMatch,
+      );
     this.router.patch('/:id/finish', matchesController.patchMatch);
     console.log('sai da rota de matches');
   }
