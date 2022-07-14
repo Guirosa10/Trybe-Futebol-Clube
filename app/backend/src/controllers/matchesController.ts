@@ -13,8 +13,8 @@ export default class teamsController {
 
   static async createMatch(req: Request, res:Response) {
     const { homeTeam, awayTeam, homeTeamGoals, awayTeamGoals } = req.body;
-    const validateHomeTeam = await teams.findOne({ where: { teamName: homeTeam } });
-    const validateAwayTeam = await teams.findOne({ where: { teamName: awayTeam } });
+    const validateHomeTeam = await teams.findByPk(homeTeam);
+    const validateAwayTeam = await teams.findByPk(awayTeam);
     if (!validateAwayTeam || !validateHomeTeam) {
       return res.status(404).json({ message: 'There is no team with such id!' });
     }
