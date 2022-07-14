@@ -13,6 +13,15 @@ export default class teamsController {
 
   static async createMatch(req: Request, res:Response) {
     const { homeTeam, awayTeam, homeTeamGoals, awayTeamGoals } = req.body;
+    const validateHomeTeam = await teams.findOne({ where: { teamName: homeTeam } });
+    const validateAwayTeam = await teams.findOne({ where: { teamName: awayTeam } });
+    if (!validateAwayTeam || !validateHomeTeam) {
+      return res.status(404).json({ message: 'There is no team with such id!' });
+    }
+    if (homeTeam === awayTeam) {
+      return res.status(401)
+        .json({ message: 'It is not possible to create a match with two equal teams' });
+    }
     const results = await matches.create({ homeTeam, awayTeam, homeTeamGoals, awayTeamGoals });
 
     return res.status(201).json(results);
