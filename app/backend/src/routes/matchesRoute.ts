@@ -1,7 +1,6 @@
 import * as express from 'express';
 import ValidateToken from '../middleware/tokenValidationMiddleware';
 import matchesController from '../controllers/matchesController';
-import validateTeams from '../middleware/teamEqualityValidationMiddleware';
 
 export default class MatchesRoute {
   router;
@@ -17,7 +16,6 @@ export default class MatchesRoute {
       .post(
         '/',
         ValidateToken.tokenValidation,
-        validateTeams.checkNullorEqualTeams,
         matchesController.createMatch,
       );
     this.router.patch('/:id/finish', matchesController.patchMatch);
