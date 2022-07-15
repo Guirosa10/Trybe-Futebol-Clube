@@ -37,7 +37,7 @@ export default class matchesController {
       match.awayTeamGoals = awayTeamGoals;
       await match.save();
     }
-    return res.status(200).send('updated');
+    return res.status(200).send({ message: 'updated' });
   }
 }
 
