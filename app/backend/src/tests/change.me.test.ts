@@ -10,6 +10,7 @@ import * as jwt from 'jsonwebtoken'
 import usersInterface from '../interfaces/usersInterface'
 import { Response } from 'superagent';
 import teams from '../database/models/teams';
+import matches from '../database/models/matches';
 
 chai.use(chaiHttp);
 
@@ -260,6 +261,28 @@ describe('testa a camada teams no /teams', () => {
       expect(chaiHttpResponse.body).to.be.equal({id: 1, teamName: 'Flamengo'})
     })
   })
+})
+
+describe('testa a camada matches em /matches', () => {
+  describe('retorna um array vazio quando não existem partidas', () => {
+    before(async () => {
+      sinon
+        .stub(matches, "findAll")
+        .resolves([])
+    })
+
+    after(()=>{
+      (matches.findAll as sinon.SinonStub).restore();
+    })
+    it('Espera uma resposta com array vazio', async () => {
+      const chaiHttpResponse = await chai
+        .request(app)
+        .get('/matches')
+      expect(chaiHttpResponse.status).to.be.equal(200)
+      expect(chaiHttpResponse.body).to.be.eql([])
+    })
+  })
+
 })
 
 

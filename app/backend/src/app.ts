@@ -29,9 +29,9 @@ class App {
 
     this.app.use(express.json());
     this.app.use(accessControl);
-    this.app.use('/login', userEntity.router);
-    this.app.use('/teams', teamEntity.router);
-    this.app.use('/matches', matchesEntity.router);
+    this.app.use(userEntity.router);
+    this.app.use(teamEntity.router);
+    this.app.use(matchesEntity.router);
   }
 
   public start(PORT: string | number):void {

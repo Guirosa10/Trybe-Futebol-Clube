@@ -11,7 +11,7 @@ export default class LoginRoute {
   }
 
   public routes() {
-    this.router.post('/', validateLogin.validateLoginBody, LoginController.login);
-    this.router.get('/validate', ValidateToken.tokenValidation, LoginController.validateRole);
+    this.router.post('/login', validateLogin.validateLoginBody, LoginController.login);
+    this.router.get('/login/validate', ValidateToken.tokenValidation, LoginController.validateRole);
   }
 }
