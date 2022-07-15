@@ -20,7 +20,7 @@ export default class MatchesRoute {
         validateTeams.checkNullorEqualTeams,
         matchesController.createMatch,
       );
-    this.router.patch('/macthes/:id', matchesController.patchMatchById);
+    this.router.patch('/matches/:id', matchesController.patchMatchById);
     this.router.patch('/matches/:id/finish', matchesController.patchMatch);
     console.log('sai da rota de matches');
   }
