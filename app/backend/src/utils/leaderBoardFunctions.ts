@@ -3,8 +3,7 @@ import matches from '../database/models/matches';
 
 const getNames = async (team: number) => {
   const teamNames = await Teams.findOne({ where:
-    { id: team },
-  attributes: ['teamName'] });
+    { id: team } });
 
   return teamNames?.teamName;
 };
