@@ -285,4 +285,93 @@ describe('testa a camada matches em /matches', () => {
 
 })
 
+describe('testa a camada matches em /leaderboard', () => {
+  describe('retorna um array quando existem partidas', () => {
+    before(async () => {
+      sinon
+        .stub(matches, "findAll")
+        .resolves([{
+          id: 1,
+          homeTeam: 1,
+          homeTeamGoals: 1,
+          awayTeam: 8,
+          awayTeamGoals: 1,
+          inProgress: false,}] as matches[])
+      sinon.stub(teams, 'findOne')
+      .resolves({
+        id: 1,
+        teamName: 'Avaí/Kindermann',
+      } as teams)
+    })
+
+    after(()=>{
+      (matches.findAll as sinon.SinonStub).restore();
+      (teams.findOne as sinon.SinonStub).restore();
+    })
+    it('Espera uma resposta com um array', async () => {
+      const chaiHttpResponse = await chai
+        .request(app)
+        .get('/leaderboard/home')
+      expect(chaiHttpResponse.status).to.be.equal(200)
+      expect(chaiHttpResponse.body).to.be.eql([{ 
+        team: 'Avaí/Kindermann',
+        totalGames: 1,
+        totalVictories: 0,
+        totalPoints: 0,
+        totalDraws: 0,
+        totalLosses: 1,
+        goalsFavor: 1,
+        goalsOwn: 8,
+        goalsBalance: -7,
+        efficiency: 0,
+    }])
+  })
+  
+
+  })
+  describe('retorna um array vazio quando não existem partidas', () => {
+    before(async () => {
+      sinon
+        .stub(matches, "findAll")
+        .resolves([{
+          id: 1,
+          homeTeam: 1,
+          homeTeamGoals: 1,
+          awayTeam: 8,
+          awayTeamGoals: 1,
+          inProgress: false,}] as matches[])
+      sinon.stub(teams, 'findOne')
+      .resolves({
+        id: 1,
+        teamName: 'Avaí/Kindermann',
+      } as teams)
+    })
+
+    after(()=>{
+      (matches.findAll as sinon.SinonStub).restore();
+      (teams.findOne as sinon.SinonStub).restore();
+    })
+    it('Espera uma resposta com um array', async () => {
+      const chaiHttpResponse = await chai
+        .request(app)
+        .get('/leaderboard/home')
+      expect(chaiHttpResponse.status).to.be.equal(400)
+      expect(chaiHttpResponse.body).to.not.be.eql([{ 
+        team: 'Avaí/Kindermann',
+        totalGames: 1,
+        totalVictories: 0,
+        totalPoints: 0,
+        totalDraws: 0,
+        totalLosses: 1,
+        goalsFavor: 1,
+        goalsOwn: 8,
+        goalsBalance: -7,
+        efficiency: 0,
+    }])
+  })
+  
+
+  })
+})
+
 

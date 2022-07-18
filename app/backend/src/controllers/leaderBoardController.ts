@@ -36,11 +36,8 @@ export default class LeaderBoardController {
   static async getTeamIds(_req: Request, res: Response) {
     const response = await getTeamsIds();
     const results = response.map((elem) => elem.id);
-    const array = [];
-    for (let index = 0; index < results.length; index += 1) {
-      array.push(testLeaderBoard(results[index]));
-    }
-    return res.status(200).json((await Promise.all(array))
+    const resultsTeam = results.map(testLeaderBoard);
+    return res.status(200).json((await Promise.all(resultsTeam))
       .sort((a, b) => b.totalPoints - a.totalPoints));
   }
 }
