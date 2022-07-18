@@ -177,7 +177,7 @@ const testLeaderBoard = async (team : number) => {
   const result = allMatchesArray
     .filter((match) => match.homeTeam === team || match.awayTeam === team);
   const newObj = {
-    team: await getNames(team),
+    name: await getNames(team),
     totalGames: result.length,
     totalVictories: await getTotalWins(team),
     totalPoints: await getPoints(team),
