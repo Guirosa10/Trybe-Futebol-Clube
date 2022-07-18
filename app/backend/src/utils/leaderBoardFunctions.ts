@@ -15,186 +15,83 @@ const getAllMatches = async () => {
   return allMatchesArray;
 };
 
-const sumGoals = async (team : number) => {
-  const allMatchesArray = await getAllMatches();
-  const result = allMatchesArray
-    .filter((match) => match.homeTeam === team || match.awayTeam === team);
-
+const sumGoals = (array : matches[]) => {
   let goals = 0;
 
-  for (let index = 0; index < result.length; index += 1) {
-    if (result[index].awayTeam === team) {
-      goals += result[index].awayTeamGoals;
-    } else {
-      goals += result[index].homeTeamGoals;
-    }
-  }
-
-  /*  const goalSum = result.forEach((ele) => {
-
-  }); */
-  return goals;
-};
-
-const sumAdversaryGoals = async (team : number) => {
-  const allMatchesArray = await getAllMatches();
-  const result = allMatchesArray
-    .filter((match) => match.homeTeam === team || match.awayTeam === team);
-
-  let goals = 0;
-
-  for (let index = 0; index < result.length; index += 1) {
-    if (result[index].awayTeam === team) {
-      goals += result[index].homeTeamGoals;
-    } else {
-      goals += result[index].awayTeamGoals;
-    }
+  for (let index = 0; index < array.length; index += 1) {
+    goals += array[index].homeTeamGoals;
   }
   return goals;
 };
 
-const getWinsAway = async (team : number) => {
-  const allMatchesArray = await getAllMatches();
-  const result = allMatchesArray
-    .filter((match) => match.homeTeam === team || match.awayTeam === team);
+const sumAdversaryGoals = (array : matches[]) => {
+  let goals = 0;
 
-  let wins = 0;
-
-  for (let index = 0; index < result.length; index += 1) {
-    if (result[index].awayTeam === team) {
-      const goalsAgainst = result[index].homeTeamGoals;
-      const goalsOwn = result[index].awayTeamGoals;
-      if (goalsAgainst < goalsOwn) {
-        wins += 1;
-      }
-    }
+  for (let index = 0; index < array.length; index += 1) {
+    goals += array[index].awayTeamGoals;
   }
+  return goals;
+};
+
+const getWinsHome = (array: matches[]) => {
+  const wins = array.reduce((acc, cur) => {
+    if (cur.homeTeamGoals > cur.awayTeamGoals) {
+      return acc + 1;
+    }
+    return acc;
+  }, 0);
 
   return wins;
 };
 
-const getWinsHome = async (team : number) => {
-  const allMatchesArray = await getAllMatches();
-  const result = allMatchesArray
-    .filter((match) => match.homeTeam === team || match.awayTeam === team);
-
-  let wins = 0;
-
-  for (let index = 0; index < result.length; index += 1) {
-    if (result[index].awayTeam === team) {
-      const goalsOwn = result[index].awayTeamGoals;
-      const goalsAgainst = result[index].homeTeam;
-      if (goalsAgainst < goalsOwn) {
-        wins += 1;
-      }
+const getDraws = (array: matches[]) => {
+  const draws = array.reduce((acc, cur) => {
+    if (cur.homeTeamGoals === cur.awayTeamGoals) {
+      return acc + 1;
     }
-  }
-
-  return wins;
-};
-
-const getTotalWins = async (team: number) => {
-  const results = await getWinsHome(team) + await getWinsAway(team);
-  return results;
-};
-
-const getDraws = async (team : number) => {
-  const allMatchesArray = await getAllMatches();
-  const timeTesteconst1 = allMatchesArray
-    .filter((match) => match.homeTeam === team || match.awayTeam === team);
-
-  const result = timeTesteconst1.filter((ele) => ele.inProgress === false);
-
-  let draws = 0;
-
-  for (let index = 0; index < result.length; index += 1) {
-    if (result[index].homeTeamGoals === result[index].awayTeamGoals) {
-      draws += 1;
-    }
-  }
+    return acc;
+  }, 0);
 
   return draws;
 };
 
-const getLossesAway = async (team : number) => {
-  const allMatchesArray = await getAllMatches();
-  const timeTesteconst1 = allMatchesArray
-    .filter((match) => match.homeTeam === team || match.awayTeam === team);
-
-  const result = timeTesteconst1.filter((ele) => ele.inProgress === false);
-
-  let losses = 0;
-
-  for (let index = 0; index < result.length; index += 1) {
-    if (result[index].awayTeam === team) {
-      const goalsAgainst = result[index].homeTeamGoals;
-      const goalsOwn = result[index].awayTeamGoals;
-      if (goalsAgainst > goalsOwn) {
-        losses += 1;
-      }
+const getLossesHome = (array: matches[]) => {
+  const losses = array.reduce((acc, cur) => {
+    if (cur.homeTeamGoals < cur.awayTeamGoals) {
+      return acc + 1;
     }
-  }
+    return acc;
+  }, 0);
 
   return losses;
 };
 
-const getLossesHome = async (team : number) => {
-  const allMatchesArray = await getAllMatches();
-  const timeTesteconst1 = allMatchesArray
-    .filter((match) => match.homeTeam === team || match.awayTeam === team);
-
-  const result = timeTesteconst1.filter((ele) => ele.inProgress === false);
-
-  let losses = 0;
-
-  for (let index = 0; index < result.length; index += 1) {
-    if (result[index].homeTeam === team) {
-      const goalsAgainst = result[index].awayTeamGoals;
-      const goalsOwn = result[index].homeTeam;
-      if (goalsAgainst > goalsOwn) {
-        losses += 1;
-      }
-    }
-  }
-
-  return losses;
-};
-
-const getTotalLosses = async (team : number) => {
-  const lossesHome = await getLossesHome(team);
-  const lossesAway = await getLossesAway(team);
-  const total = lossesHome + lossesAway;
-  return total;
-};
-
-const getPoints = async (team: number) => {
-  const result = (await getTotalWins(team) * 3) + (await getDraws(team));
+const getPoints = (array: matches[]) => {
+  const result = (getWinsHome(array) * 3) + (getDraws(array));
   return result;
 };
 
 const testLeaderBoard = async (team : number) => {
   const allMatchesArray = await getAllMatches();
   const result = allMatchesArray
-    .filter((match) => match.homeTeam === team || match.awayTeam === team);
+    .filter((match) => match.homeTeam === team);
   const newObj = {
     name: await getNames(team),
+    totalPoints: getPoints(result),
     totalGames: result.length,
-    totalVictories: await getTotalWins(team),
-    totalPoints: await getPoints(team),
-    totalDraws: await getDraws(team),
-    totalLosses: await getTotalLosses(team),
-    goalsFavor: await sumGoals(team),
-    goalsOwn: await sumAdversaryGoals(team),
-    goalsBalance: await sumGoals(team) - await sumAdversaryGoals(team),
-    efficiency: (((await getPoints(team)) / (result.length * 3)) * 100).toFixed(2),
+    totalVictories: getWinsHome(result),
+    totalDraws: getDraws(result),
+    totalLosses: getLossesHome(result),
+    goalsFavor: sumGoals(result),
+    goalsOwn: sumAdversaryGoals(result),
+    goalsBalance: sumGoals(result) - sumAdversaryGoals(result),
+    efficiency: +(((getPoints(result)) / (result.length * 3)) * 100).toFixed(2),
   };
   return newObj;
 };
 
 const getTeamsIds = async () => {
-  const teamNames = await Teams.findAll({
-
-    attributes: ['id'] });
+  const teamNames = await Teams.findAll();
 
   return teamNames;
 };
@@ -204,13 +101,9 @@ export {
   getAllMatches,
   sumGoals,
   sumAdversaryGoals,
-  getWinsAway,
   getWinsHome,
-  getTotalWins,
   getDraws,
-  getLossesAway,
   getLossesHome,
-  getTotalLosses,
   getPoints,
   testLeaderBoard,
   getTeamsIds,

@@ -10,6 +10,5 @@ export default class LeaderBoardRoute {
 
   public routes() {
     this.router.get('/leaderboard/home', LeaderBoardController.getTeamIds);
-    this.router.get('/leaderboard/teams', LeaderBoardController.testsssLeaderBoard);
   }
 }
