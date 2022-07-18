@@ -42,3 +42,5 @@ export default class matchesController {
 }
 
 // fonte para left join com sequelize https://stackoverflow.com/questions/27561915/how-can-i-use-left-join-with-sequelize;
+
+// fonte para update https://sebhastian.com/sequelize-update-example/#:~:text=upsert()%20method%20is%20a,case%20of%20the%20Users%20table.

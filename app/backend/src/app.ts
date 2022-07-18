@@ -2,10 +2,12 @@ import * as express from 'express';
 import LoginRoute from './routes/loginRoute';
 import TeamRoute from './routes/teamRoute';
 import MatchesRoute from './routes/matchesRoute';
+import LeaderBoardRoute from './routes/leaderBoardRoutes';
 
 const teamEntity = new TeamRoute();
 const userEntity = new LoginRoute();
 const matchesEntity = new MatchesRoute();
+const leaderboardEntity = new LeaderBoardRoute();
 
 class App {
   public app: express.Express;
@@ -32,6 +34,7 @@ class App {
     this.app.use(userEntity.router);
     this.app.use(teamEntity.router);
     this.app.use(matchesEntity.router);
+    this.app.use(leaderboardEntity.router);
   }
 
   public start(PORT: string | number):void {
