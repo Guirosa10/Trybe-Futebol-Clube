@@ -4,7 +4,7 @@
 
 Introdução
 =============
-Este projeto foi feito junto ao curso da Trybe. Neste, utilizamos typescript e sequelize ORM para criar um CRUD. A partir das tecnologias, criamos um informativo de classificações das partidas de futebol do seu time favorito. O front-end foi pré-desenvolvido pelo time da trybe, sendo assim, apenas o backend da aplicação foi desenvolvido.
+Este projeto foi feito junto ao curso da Trybe. Neste, utilizamos typescript e sequelize ORM para criar um CRUD. A partir das tecnologias, criamos um informativo de classificações das partidas de futebol do seu time favorito. Além disso, foram desenvolvidos testes de integração. O front-end foi pré-desenvolvido pelo time da trybe, sendo assim, apenas o backend da aplicação foi desenvolvido.
 
 Tecnologias
 -------------
